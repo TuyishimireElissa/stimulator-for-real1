@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/virtual-equipment/equipment.schema.json",
+  "title": "Virtual equipment definition",
+  "description": "Versioned metadata contract. Empty or null specifications do not assert real-world specifications.",
+  "type": "object",
+  "required": ["id", "name", "category", "definition_version", "source", "interfaces", "ports", "components", "compatibility_rules", "asset", "simulation_model", "limitations", "license"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z][a-z0-9_]*$"},
+    "name": {"type": "string", "minLength": 1},
+    "category": {"type": "string", "minLength": 1},
+    "manufacturer": {"type": ["string", "null"]},
+    "model": {"type": ["string", "null"]},
+    "revision": {"type": ["string", "null"]},
+    "description": {"type": "string"},
+    "source": {"type": "string", "minLength": 1},
+    "definition_version": {"type": "integer", "minimum": 1},
+    "dimensions_m": {"type": ["object", "null"], "properties": {"x": {"type": "number", "exclusiveMinimum": 0}, "y": {"type": "number", "exclusiveMinimum": 0}, "z": {"type": "number", "exclusiveMinimum": 0}}, "required": ["x", "y", "z"], "additionalProperties": false},
+    "weight_kg": {"type": ["number", "null"], "exclusiveMinimum": 0},
+    "specifications": {"type": "object"},
+    "electrical_ratings": {"type": "object"},
+    "interfaces": {"type": "array", "items": {"$ref": "#/$defs/interface"}},
+    "ports": {"type": "array", "items": {"$ref": "#/$defs/port"}},
+    "terminals": {"type": "array", "items": {"$ref": "#/$defs/port"}},
+    "components": {"type": "array", "items": {"type": "object", "required": ["id", "kind"], "properties": {"id": {"type": "string"}, "kind": {"type": "string"}, "specification": {"type": "object"}}, "additionalProperties": true}},
+    "compatibility_rules": {"type": "array", "items": {"type": "object"}},
+    "asset": {"type": "string"},
+    "simulation_model": {"type": ["string", "null"]},
+    "operating_modes": {"type": "array", "items": {"type": "string"}},
+    "measurements": {"type": "array", "items": {"type": "string"}},
+    "faults": {"type": "array", "items": {"type": "string"}},
+    "safety_constraints": {"type": "array", "items": {"type": "string"}},
+    "limitations": {"type": "array", "items": {"type": "string"}},
+    "license": {"type": "string", "minLength": 1}
+  },
+  "$defs": {
+    "interface": {"type": "object", "required": ["id", "type", "direction"], "properties": {"id": {"type": "string"}, "type": {"type": "string"}, "direction": {"enum": ["input", "output", "bidirectional", "passive"]}, "parameters": {"type": "object"}}, "additionalProperties": false},
+    "port": {"type": "object", "required": ["id", "interface_type"], "properties": {"id": {"type": "string"}, "interface_type": {"type": "string"}, "direction": {"enum": ["input", "output", "bidirectional", "passive"]}, "parameters": {"type": "object"}}, "additionalProperties": false}
+  },
+  "additionalProperties": false
+}
